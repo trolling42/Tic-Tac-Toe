@@ -144,6 +144,13 @@ var board = {
       return;
     }
 
+    if (board.gameOver === false) {
+      if (board.posArr.filter(function(value){return value !== undefined;}).length === 9) {
+        alert("That was a tie");
+        return;
+      }
+    }
+
     board.calculateScores();
     var done = false, status = false;
 
