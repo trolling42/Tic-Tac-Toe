@@ -1,0 +1,24 @@
+body {
+  background-color: beige;
+}
+
+h1 {
+  text-align: center;
+  font-weight: 200;
+}
+
+.board {
+  border: 2px solid;
+  width: 300px;
+  height: 300px;
+  margin: 10px auto;
+
+}
+
+td {
+  height: 100px;
+  width: 100px;
+  border: 2px solid;
+  text-align: center;
+  font-size: 40px;
+}
