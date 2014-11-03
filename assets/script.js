@@ -146,7 +146,7 @@ var board = {
   playNextMove: function(playedPosition) {
     "use strict";
 
-    var done = false, status = false;
+    var done = false;
 
     if (board.gameOver === true) {
       return;
@@ -165,7 +165,7 @@ var board = {
     for (var move in board.possibleWins) {
       if (board.possibleWins.hasOwnProperty(move)) {
 
-        if (board.possibleWins[move].score === -2) {
+        if (board.possibleWins[move].score === -2 && done === false) {
           // Win the game if possible
           done = board.makeWinningMove(playedPosition, move);
         }
@@ -173,12 +173,23 @@ var board = {
         if (done === true) {
           return;
         }
+        
+      }
+    }
+
+    for (var move in board.possibleWins) {
+      if (board.possibleWins.hasOwnProperty(move)) {
 
         // Block the player from winning the game
-        if (board.possibleWins[move].score === 2) {
+        if (board.possibleWins[move].score === 2 && done === false) {
           done = board.makeWinningMove(playedPosition, move);
         }
+
+        if (done === true) {
+          return;
+        }
       }
+
     }
 
     // Make a move so that the odds of the player winning are minimized. This involves selecting a square on which the player already has a piece
