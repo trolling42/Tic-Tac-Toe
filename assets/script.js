@@ -184,7 +184,6 @@ var board = {
     // Make a move so that the odds of the player winning are minimized. This involves selecting a square on which the player already has a piece
     if (done === false) {
       done = board.fillRandomSquare(playedPosition);
-      console.log(done);
       if (done === false) {
         board.playNextMove(10);
       }
