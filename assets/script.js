@@ -92,12 +92,13 @@ var board = {
 
     var temp;
     if (position > 8) {
-      return;
+      return false;
     }
     temp = document.getElementById(position);
     temp.innerHTML = character;
     board.posArr[parseInt(position)] = value;
     board.calculateScores();
+    return true;
   },
   /*
    This function fills in a random square after calculating which would minize the players odds
@@ -105,22 +106,27 @@ var board = {
   fillRandomSquare: function (playedPosition) {
     "use strict";
 
-    var emptyElem;
+    var emptyElem, status = false, randRow;
     switch (true) {
       case playedPosition < 3:
         emptyElem = board.getEmptyElement(board.possibleWins.row0.values);
-        board.setElement(emptyElem, "O", -1);
-        return true;
+        status = board.setElement(emptyElem, "O", -1);
+        return status;
       case (playedPosition >= 3 && playedPosition < 6):
         emptyElem = board.getEmptyElement(board.possibleWins.row3.values);
-        board.setElement(emptyElem, "O", -1);
-        return true;
-      case playedPosition >= 6:
+        status = board.setElement(emptyElem, "O", -1);
+        return status;
+      case (playedPosition >= 6 && playedPosition < 8):
         emptyElem = board.getEmptyElement(board.possibleWins.row6.values);
-        board.setElement(emptyElem, "O", -1);
-        return true;
+        status = board.setElement(emptyElem, "O", -1);
+        return status;
+      default:
+        randRow = Math.floor(Math.random() * 3) * 3;
+        emptyElem = board.getEmptyElement(board.possibleWins['row' + randRow].values);
+        status = board.setElement(emptyElem, "O", -1);
+        return status;
     }
-    return false;
+    return status;
   },
 
   makeWinningMove: function(playedPosition, move) {
@@ -140,6 +146,8 @@ var board = {
   playNextMove: function(playedPosition) {
     "use strict";
 
+    var done = false, status = false;
+
     if (board.gameOver === true) {
       return;
     }
@@ -152,7 +160,7 @@ var board = {
     }
 
     board.calculateScores();
-    var done = false, status = false;
+
 
     for (var move in board.possibleWins) {
       if (board.possibleWins.hasOwnProperty(move)) {
@@ -175,12 +183,10 @@ var board = {
 
     // Make a move so that the odds of the player winning are minimized. This involves selecting a square on which the player already has a piece
     if (done === false) {
-      if (board.posArr[4] === undefined) { // If the center piece is open always take it. This minimizes the odds very much
-        board.setElement(4, "O", -1);
-      } else {
-        status = board.fillRandomSquare(playedPosition);
-        if (status === true) {
-        }
+      done = board.fillRandomSquare(playedPosition);
+      console.log(done);
+      if (done === false) {
+        board.playNextMove(10);
       }
     }
 
@@ -198,5 +204,6 @@ var board = {
   }
 
 };
+
 var table = document.getElementById("board");
 table.addEventListener("click", board.handleClick);
